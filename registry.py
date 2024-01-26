@@ -1,8 +1,5 @@
 from .grid_search import *
 from .experiment  import Experiment
-from .jax_wrapper import JaxWrapper
-
-# from .data_util   import * # TODO readd torch support as optional
 
 from contextlib import contextmanager
 from rich import print
@@ -108,15 +105,7 @@ class Registry:
         exclusive_add(self.models, self.rescope(key), model, name='models')
 
     def make_model(self, name, settings, alias=None, apply_wrapper=True):
-        if alias is None:
-            alias = name
-        if name not in self.models:
-            raise KeyError(f'Please define the model {name} (alias {alias}) before referencing it')
-        thunk = self.models[name](settings, alias)
-        if apply_wrapper and 'torch' not in name:
-            return JaxWrapper(thunk, settings, alias)
-        else:
-            return thunk
+        raise NotImplementedError('Please define make_model for a specific framework, e.g. jax')
 
     def add_datasets(self, datasets):
         self.datasets.update(self.rescope_all(datasets))
@@ -154,12 +143,8 @@ class Registry:
         for k in sorted(self.setups.keys()):
             print(f'[blue] {k:40}')
 
-    # def split_dataset(self, settings, dataset_name):
-    #     dataset = self.datasets[dataset_name]
-    #     xtest, xtrain, xval = split(dataset, len(dataset), settings)
-    #     settings.update(dataset=dataset, train_data=xtrain, test_data=xtest,
-    #                     val_data=xval)
-    #     return settings
+    def split_dataset(self, settings, dataset_name):
+        raise NotImplementedError('Please define split_dataset for a specific framework, e.g. jax')
 
     def add(self, settings, name='', exp_constructor=None, dataset='',
             ablations=None, alt_settings=None):

@@ -10,7 +10,7 @@ import json, os
 from contextlib import contextmanager
 from rich import print as rprint
 from rich.pretty import pprint
-from settings import Settings
+from .settings import Settings
 
 def default_json(obj):
     if isinstance(obj, Settings):
