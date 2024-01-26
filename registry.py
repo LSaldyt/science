@@ -1,7 +1,8 @@
-from ..utils.data_util  import *
 from .grid_search import *
-from .experiment import Experiment
+from .experiment  import Experiment
 from .jax_wrapper import JaxWrapper
+
+# from .data_util   import * # TODO readd torch support as optional
 
 from contextlib import contextmanager
 from rich import print
@@ -153,12 +154,12 @@ class Registry:
         for k in sorted(self.setups.keys()):
             print(f'[blue] {k:40}')
 
-    def split_dataset(self, settings, dataset_name):
-        dataset = self.datasets[dataset_name]
-        xtest, xtrain, xval = split(dataset, len(dataset), settings)
-        settings.update(dataset=dataset, train_data=xtrain, test_data=xtest,
-                        val_data=xval)
-        return settings
+    # def split_dataset(self, settings, dataset_name):
+    #     dataset = self.datasets[dataset_name]
+    #     xtest, xtrain, xval = split(dataset, len(dataset), settings)
+    #     settings.update(dataset=dataset, train_data=xtrain, test_data=xtest,
+    #                     val_data=xval)
+    #     return settings
 
     def add(self, settings, name='', exp_constructor=None, dataset='',
             ablations=None, alt_settings=None):
