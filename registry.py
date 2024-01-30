@@ -28,6 +28,23 @@ class Registry:
     def __contains__(self, key):
         return key in self.experiments
 
+    def find_and_run_experiment(self, experiment_name, args, main_settings):
+        if experiment_name == 'list':
+            if len(args) > 1:
+                self.list(setup=args[0])
+            else:
+                self.list()
+        elif experiment_name == 'list_setups':
+            self.list_setups()
+        elif experiment_name == 'show':
+            assert len(args) > 1, 'Must provide experiment to show params of'
+            exp = self.fetch(args[0])
+            exp.show()
+        else:
+            exp = self.fetch(experiment_name)
+            # exp.update(directory_nesting=nest)
+            self.run(experiment_name)
+
     @contextmanager
     def scope(self, name, settings=None, constructor=None):
         prev = self.scope_name
@@ -104,9 +121,6 @@ class Registry:
     def add_model(self, model, key=''):
         exclusive_add(self.models, self.rescope(key), model, name='models')
 
-    def make_model(self, name, settings, alias=None, apply_wrapper=True):
-        raise NotImplementedError('Please define make_model for a specific framework, e.g. jax')
-
     def add_datasets(self, datasets):
         self.datasets.update(self.rescope_all(datasets))
 
@@ -130,8 +144,6 @@ class Registry:
     def run(self, name):
         exp = self.experiments[name]
         exp.update(registry=self) # At final stage only
-        for wrapper in exp.settings.wrapped_models:
-            wrapper.settings.update(registry=self)
         exp.run()
 
     def list(self, setup=None):
@@ -142,9 +154,6 @@ class Registry:
     def list_setups(self):
         for k in sorted(self.setups.keys()):
             print(f'[blue] {k:40}')
-
-    def split_dataset(self, settings, dataset_name):
-        raise NotImplementedError('Please define split_dataset for a specific framework, e.g. jax')
 
     def add(self, settings, name='', exp_constructor=None, dataset='',
             ablations=None, alt_settings=None):
