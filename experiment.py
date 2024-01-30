@@ -70,6 +70,11 @@ class Experiment:
     def run(self):
         raise NotImplementedError('The default Experiment class does not implement run(), use a derived class :)')
 
+    def save_json(self, tag, data):
+        path = self.data / (tag + '.json')
+        print(path)
+        path.write_text(json.dumps(data, indent=4))
+
     def save_tensors(self, tensors):
         ''' tensors is a dictionary {k : v} where k is str, v is castable to ndarray '''
         for k, v in tensors.items():
