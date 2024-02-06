@@ -67,7 +67,7 @@ class Experiment:
         derived_exp = type(self)(f'{self.name}_{name}', self.settings.derive(**kwargs))
         return derived_exp
 
-    def run(self):
+    def run(self, *args, **kwargs):
         raise NotImplementedError('The default Experiment class does not implement run(), use a derived class :)')
 
     def save_json(self, tag, data):

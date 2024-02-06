@@ -43,7 +43,7 @@ class Registry:
         else:
             exp = self.fetch(experiment_name)
             # exp.update(directory_nesting=nest)
-            self.run(experiment_name)
+            self.run(experiment_name, *args)
 
     @contextmanager
     def scope(self, name, settings=None, constructor=None):
@@ -141,10 +141,10 @@ class Registry:
         exclusive_add(self.experiments, experiment.name,
                       experiment, name='experiments')
 
-    def run(self, name):
+    def run(self, name, *args, **kwargs):
         exp = self.experiments[name]
         exp.update(registry=self) # At final stage only
-        exp.run()
+        exp.run(*args, **kwargs)
 
     def list(self, setup=None):
         self.finalize(setup=setup)
