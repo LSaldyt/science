@@ -13,6 +13,7 @@ def get_latest_experiment(
         experiment_path = parent_path / experiment
     if experiment_path is None:
         experiment_path = list(parent_path.iterdir())[-1]
+        experiment_path = Path(experiment_path)
 
     exp_metadata_path = experiment_path / 'meta.json'
     exp_metadata = json.loads(exp_metadata_path.read_text())
