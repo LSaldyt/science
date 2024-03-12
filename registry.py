@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from rich import print
 
 def exclusive_add(d, k, v, name='entries'):
-    print(f'{name.title()}: [blue] {k}')
+    # print(f'{name.title()}: [blue] {k}')
     if k not in d:
         d[k] = v
     else:
@@ -149,11 +149,11 @@ class Registry:
     def list(self, setup=None):
         self.finalize(setup=setup)
         for k, v in sorted(self.experiments.items(), key=lambda t : t[0]):
-            print(f'[blue] {k:40}')
+            print(f'[blue]    {k:40}')
 
     def list_setups(self):
         for k in sorted(self.setups.keys()):
-            print(f'[blue] {k:40}')
+            print(f'[blue]    {k:40}')
 
     def add(self, settings, name='', exp_constructor=None, dataset='',
             ablations=None, alt_settings=None):
