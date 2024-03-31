@@ -118,6 +118,7 @@ class Experiment:
         if writer.count % self.settings.meta.log_interval == 0:
             if out_str is not None:
                 self.settings.meta.log_function(out_str.format(**metrics))
+        writer.dict_writer.writerow(metrics)
         writer.count += 1
 
     def flush(self, writer):
