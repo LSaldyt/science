@@ -28,7 +28,7 @@ class Registry:
     def __contains__(self, key):
         return key in self.experiments
 
-    def find_and_run_experiment(self, experiment_name, args, main_settings):
+    def find_and_run_experiment(self, experiment_name, args, kwargs, main_settings):
         if experiment_name == 'list':
             if len(args) > 1:
                 self.list(setup=args[0])
@@ -43,7 +43,7 @@ class Registry:
         else:
             exp = self.fetch(experiment_name)
             # exp.update(directory_nesting=nest)
-            self.run(experiment_name, *args)
+            self.run(experiment_name, *args, **kwargs)
 
     @contextmanager
     def scope(self, name, settings=None, constructor=None):
