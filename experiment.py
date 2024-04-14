@@ -113,7 +113,9 @@ class Experiment:
         metrics.update(**additional)
         if writer_name not in self.writers:
             file_handle = open(self.data / f'{writer_name}.csv', 'w')
-            self.writers[writer_name] = Writer(file_handle, csv.DictWriter(file_handle, fieldnames=list(metrics.keys())))
+            writer = Writer(file_handle, csv.DictWriter(file_handle, fieldnames=list(metrics.keys())))
+            writer.dict_writer.writeheader()
+            self.writers[writer_name] = writer
         writer = self.writers[writer_name]
         if writer.count % self.settings.meta.flush_interval == 0:
             writer.file_handle.flush()
