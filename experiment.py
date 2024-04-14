@@ -49,13 +49,15 @@ class Experiment:
         self.phases = ['train', 'test', 'val']
         self.writers = dict()
 
-    def ensure(self, write=True):
+    def ensure(self, write=True, **kwargs):
         self.instance_dir.mkdir(parents=True, exist_ok=True)
         sub = lambda p : self.instance_dir.joinpath(p)
         self.metainfo      = sub('meta.json')
         self.figures       = sub('figures')
         self.checkpoints   = sub('checkpoints')
         self.data          = sub('data')
+
+        self.settings.update(**kwargs)
 
         self.figures.mkdir(parents=True, exist_ok=True)
         self.data.mkdir(parents=True, exist_ok=True)
