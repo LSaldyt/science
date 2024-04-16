@@ -117,13 +117,14 @@ class Experiment:
             writer.dict_writer.writeheader()
             self.writers[writer_name] = writer
         writer = self.writers[writer_name]
-        if writer.count % self.settings.meta.flush_interval == 0:
-            writer.file_handle.flush()
+        # if writer.count % self.settings.meta.flush_interval == 0:
+        #     writer.file_handle.flush()
         if writer.count % self.settings.meta.log_interval == 0:
             if out_str is not None:
                 self.settings.meta.log_function(out_str.format(**metrics))
         writer.dict_writer.writerow(metrics)
         writer.count += 1
+        writer.file_handle.flush()
 
     def flush(self, writer):
         if self.settings.flush:
