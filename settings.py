@@ -24,6 +24,9 @@ class Settings:
         ''' Be careful with this one :) '''
         parent.update(self.params)
 
+    def get(self, k, v):
+        return self.params.get(k, v)
+
     @contextmanager
     def context(self, **kwargs):
         backups = {k : self.params[k] for k in kwargs}
