@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import csv
 
 from contextlib import contextmanager
+from rich.pretty import pprint
 
 import numbers
 import numpy as np
@@ -72,8 +73,9 @@ class Experiment:
             writer.file_handle.close()
 
     @contextmanager
-    def ensured(self):
-        self.ensure()
+    def ensured(self, *args, **kwargs):
+        self.ensure(*args, **kwargs)
+        pprint(self.settings.params)
         yield
         self.cleanup()
 
@@ -138,7 +140,7 @@ class Experiment:
     ''' The three unimplemented methods, commonly used in derived classes '''
 
     def run(self, *args, **kwargs):
-        with self.ensured(): # Demonstration of how this should be used
+        with self.ensured(*args, **kwargs): # Demonstration of how this should be used
             raise NotImplementedError('The default Experiment class does not implement run(), use a derived class :)')
 
     def reseed(self, seed):
