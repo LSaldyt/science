@@ -58,7 +58,14 @@ class Experiment:
         self.checkpoints   = sub('checkpoints')
         self.data          = sub('data')
 
-        self.settings.update(**kwargs)
+        for k, v in kwargs.items():
+            *pre, final = k.split('.')
+            # e.g. ['optimize'], 'learning_rate'
+            parents = []
+            sub = self.settings
+            for sk in pre:
+                sub = getattr(self.settings, sk)
+            sub.update(**{final : v})
 
         self.figures.mkdir(parents=True, exist_ok=True)
         self.data.mkdir(parents=True, exist_ok=True)
