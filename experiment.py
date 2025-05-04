@@ -101,8 +101,10 @@ class Experiment:
     def save_tensors(self, tensors, prefix=None):
         ''' tensors is a dictionary {k : v} where k is str, v is castable to ndarray '''
         location = self.data if prefix is None else self.data / prefix
+        location.mkdir(parents=True, exist_ok=True)
 
         for k, v in tensors.items():
+            k = k.replace('/', '-')
             path = location.joinpath(k + '.npz')
             if not isinstance(v, tuple):
                 v = np.array(v)
