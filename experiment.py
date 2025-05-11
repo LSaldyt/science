@@ -78,6 +78,7 @@ class Experiment:
     def cleanup(self):
         for writer in self.writers.values():
             writer.file_handle.close()
+        self.writers = dict()
 
     @contextmanager
     def ensured(self, *args, **kwargs):
