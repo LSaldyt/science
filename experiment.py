@@ -50,6 +50,14 @@ class Experiment:
         self.phases = ['train', 'test', 'val']
         self.writers = dict()
 
+    def presure(self, **kwargs):
+        for k, v in kwargs.items():
+            *pre, final = k.split('.')
+            sub = self.settings
+            for sk in pre:
+                sub = getattr(self.settings, sk)
+            sub.update(**{final : v})
+
     def ensure(self, write=True, **kwargs):
         self.instance_dir.mkdir(parents=True, exist_ok=True)
         sub = lambda p : self.instance_dir.joinpath(p)
@@ -57,15 +65,6 @@ class Experiment:
         self.figures       = sub('figures')
         self.checkpoints   = sub('checkpoints')
         self.data          = sub('data')
-
-        for k, v in kwargs.items():
-            *pre, final = k.split('.')
-            # e.g. ['optimize'], 'learning_rate'
-            parents = []
-            sub = self.settings
-            for sk in pre:
-                sub = getattr(self.settings, sk)
-            sub.update(**{final : v})
 
         self.figures.mkdir(parents=True, exist_ok=True)
         self.data.mkdir(parents=True, exist_ok=True)
@@ -85,6 +84,14 @@ class Experiment:
         pprint(self.settings.params)
         yield
         self.cleanup()
+
+    def iterate_seeds(self):
+        original_seed = self.settings.seed
+        print(f'Iterating through {self.settings.n_seeds} seeds from {original_seed}')
+        for i in range(self.settings.n_seeds):
+            print(f'Seed: +{i}')
+            self.update(seed=original_seed + i)
+            yield None
 
     def update(self, **kwargs):
         self.settings.update(**kwargs)
