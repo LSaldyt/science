@@ -59,8 +59,9 @@ class Experiment:
             sub.update(**{final : v})
 
     def ensure(self, write=True, **kwargs):
-        self.instance_dir.mkdir(parents=True, exist_ok=True)
-        sub = lambda p : self.instance_dir.joinpath(p)
+        seed_dir = self.instance_dir / f'{self.settings.seed}'
+        seed_dir.mkdir(parents=True, exist_ok=True)
+        sub = lambda p : seed_dir.joinpath(p)
         self.metainfo      = sub('meta.json')
         self.figures       = sub('figures')
         self.checkpoints   = sub('checkpoints')
