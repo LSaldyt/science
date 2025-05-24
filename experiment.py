@@ -83,7 +83,7 @@ class Experiment:
     @contextmanager
     def ensured(self, *args, **kwargs):
         self.ensure(*args, **kwargs)
-        pprint(self.settings.params)
+        # pprint(self.settings.params)
         yield
         self.cleanup()
 
